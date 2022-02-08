@@ -1,18 +1,19 @@
 using System.Threading;
 using System.Threading.Tasks;
+using currency_exchange_rates_bot.Models.Keyboards;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
 namespace currency_exchange_rates_bot.Actions
 {
-    public sealed class HelloWorldCommand : IChatAction
+    public sealed class StartCommand : IChatAction
     {
-        private ITelegramBotClient Client { get; }
-        private const string CommandName = "/helloworld";
+        private readonly ITelegramBotClient _client;
+        private const string CommandName = "/start";
 
-        public HelloWorldCommand(ITelegramBotClient client)
+        public StartCommand(ITelegramBotClient client)
         {
-            Client = client;
+            _client = client;
         }
 
         public bool Contains(Message message)
@@ -22,9 +23,10 @@ namespace currency_exchange_rates_bot.Actions
 
         public async Task ExecuteAsync(Message message, CancellationToken ct)
         {
-            await Client.SendTextMessageAsync(
+            await _client.SendTextMessageAsync(
                       message.Chat.Id,
-                      "Hello world!",
+                      "Оберіть функцію",
+                      replyMarkup: MainMenu.GetMainMenu(),
                       cancellationToken: ct);
         }
     }

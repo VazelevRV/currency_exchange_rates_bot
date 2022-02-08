@@ -22,7 +22,9 @@ namespace currency_exchange_rates_bot
                     var env = context.HostingEnvironment.EnvironmentName;
                     builder
                         .AddJsonFile("botsettings.json", false, false)
-                        .AddJsonFile($"botsettings.{env}.json", true, false);
+                        .AddJsonFile($"botsettings.{env}.json", true, false)
+                        .AddJsonFile("currency_api_settings.json", false, false)
+                        .AddJsonFile($"currency_api_settings.{env}.json", true, false);
                 })
                 .ConfigureServices((context, services) =>
                 {
@@ -33,6 +35,7 @@ namespace currency_exchange_rates_bot
                         new TelegramBotClient(config["BOT_TOKEN"]));
                     services.AddSingleton<IUpdateHandler, BotHandler>();
                     services.AddHostedService<BotHandlerService>();
+                    services.AddSingleton<CurrencyAPIService>(new CurrencyAPIService(config["CURRENCY_TOKEN"]));
 
                     var baseType = typeof(IChatAction);
                     foreach (var commandType in baseType.Assembly.GetTypes().Where(t => baseType.IsAssignableFrom(t) && t.IsClass && t.IsPublic && !t.IsAbstract))
