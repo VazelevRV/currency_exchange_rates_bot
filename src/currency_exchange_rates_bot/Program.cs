@@ -8,7 +8,10 @@ using Telegram.Bot;
 using Telegram.Bot.Extensions.Polling;
 using currency_exchange_rates_bot.Services;
 using currency_exchange_rates_bot.Actions;
-
+using Microsoft.EntityFrameworkCore;
+using System;
+using currency_exchange_rates_bot.Models;
+using System.Reflection;
 
 namespace currency_exchange_rates_bot
 {
@@ -37,6 +40,12 @@ namespace currency_exchange_rates_bot
                     services.AddHostedService<BotHandlerService>();
                     services.AddSingleton<CurrencyAPIService>(new CurrencyAPIService(config["CURRENCY_TOKEN"]));
 
+                    services.AddDbContext<CurrencyExchangeDbContext>(options =>
+                    options.UseSqlite("Filename=Application.db", builder =>
+                    {
+                        builder.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName);
+                    }));
+
                     var baseType = typeof(IChatAction);
                     foreach (var commandType in baseType.Assembly.GetTypes().Where(t => baseType.IsAssignableFrom(t) && t.IsClass && t.IsPublic && !t.IsAbstract))
                     {
@@ -50,6 +59,22 @@ namespace currency_exchange_rates_bot
                     builder.AddDebug();
                 })
                 .Build();
+
+            using (IServiceScope scope = host.Services.CreateScope())
+            {
+                IServiceProvider provider = scope.ServiceProvider;
+                CurrencyExchangeDbContext context = provider.GetRequiredService<CurrencyExchangeDbContext>();
+
+                //if(File.Exists("Application.db"))
+                //    File.Delete("Application.db");
+
+                // Застосувати міграції
+                if (context.Database.GetMigrations().Any())
+                    context.Database.Migrate();
+
+                // Впевнитись, що база створена
+                context.Database.EnsureCreated();
+            }
 
             await host.RunAsync();
         }

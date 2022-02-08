@@ -1,14 +1,14 @@
-using System;
-using System.Collections.Generic;
+using currency_exchange_rates_bot.Models.DTO.Requests;
 
 namespace currency_exchange_rates_bot.Models.DTO.Responses
 {
-    public partial class CurrentRatesResponse
+    public class ConvertRatesResponse : ConvertRatesRequest
     {
-        public bool Success { get; set; }
-        public long Timestamp { get; set; }
-        public string Base { get; set; }
-        public DateTime Date { get; set; }
-        public Dictionary<string, double> Rates { get; set; }
+        public readonly ConvertRatesRequest RequestInfo;
+        public ConvertRatesResponse(ConvertRatesRequest request)
+        {
+            RequestInfo = request;
+        }
+        public double Result {get;init;}
     }
 }

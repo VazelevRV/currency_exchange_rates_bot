@@ -4,6 +4,8 @@ using currency_exchange_rates_bot.Services;
 using currency_exchange_rates_bot.Models.DTO.Requests;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using System;
+using currency_exchange_rates_bot.Models;
 
 namespace currency_exchange_rates_bot.Actions
 {
@@ -24,17 +26,14 @@ namespace currency_exchange_rates_bot.Actions
             return message.Text.StartsWith(CommandName);
         }
 
-        public async Task ExecuteAsync(Message message, CancellationToken ct)
+        public async Task ExecuteAsync(BotUser user, Message message, CancellationToken ct)
         {
             var response = await _currencyService.GetCurrentRatesAsync(
-                new CurrentRatesRequest(){
-                    Format = "format=1",
-                    Symbols = "USD,UAH,RUB"
-                    },
+                new CurrentRatesRequest(){BaseCurrency = "UAH"},
                 ct);
 
-            string messageText = $"1 {response.Base} на {response.Date.ToShortDateString()} = \n";
-            foreach(var rate in response.Rates)
+            string messageText = $"1 UAH на {DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()} = \n";
+            foreach(var rate in response.Data)
             {
                 messageText += $"{rate.Key} {rate.Value}\n";
             }
