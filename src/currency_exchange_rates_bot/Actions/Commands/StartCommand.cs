@@ -5,10 +5,11 @@ using currency_exchange_rates_bot.Models.Keyboards;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace currency_exchange_rates_bot.Actions
+namespace currency_exchange_rates_bot.Actions.Commands
 {
     public sealed class StartCommand : IChatAction
     {
+        public ActionTypes ActionType {get;init;} = ActionTypes.command;
         private readonly ITelegramBotClient _client;
         private const string CommandName = "/start";
 
@@ -17,7 +18,7 @@ namespace currency_exchange_rates_bot.Actions
             _client = client;
         }
 
-        public bool Contains(Message message)
+        public bool Contains(BotUser user, Message message)
         {
             return message.Text.StartsWith(CommandName);
         }

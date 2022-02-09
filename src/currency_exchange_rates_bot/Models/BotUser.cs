@@ -8,5 +8,7 @@ namespace currency_exchange_rates_bot.Models
         public int Id {get;init;}
         public long TelegramId {get;init;}
         public string State{get;set;}
+        public string StateData{get;set;}
+
     }
 }

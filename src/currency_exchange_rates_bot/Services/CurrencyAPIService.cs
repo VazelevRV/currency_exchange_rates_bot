@@ -4,6 +4,7 @@ using currency_exchange_rates_bot.Models.DTO.Responses;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Linq;
+using System;
 
 namespace currency_exchange_rates_bot.Services
 {
@@ -28,17 +29,21 @@ namespace currency_exchange_rates_bot.Services
 
         public async Task<ConvertRatesResponse> ConvertRateAsync(ConvertRatesRequest request, CancellationToken ct)
         {
+
             CurrentRatesResponse currentRatesResponse = await _apiClient.GetAsync<CurrentRatesResponse>(
                 new RestRequest($"latest?apikey={_currencyToken}&base_currency={request.From}"),
                 ct);
 
             var exchangeRate = currentRatesResponse.Data.FirstOrDefault(r => r.Key == request.To);
 
+            if(exchangeRate.Key == null)
+                throw new ArgumentException();
+
             var response = new ConvertRatesResponse(request)
             {
-                Result = request.Amount *  exchangeRate.Value
+                Result = request.Amount * exchangeRate.Value
             };
-            
+
             return response;
         }
     }

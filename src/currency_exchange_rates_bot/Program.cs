@@ -33,18 +33,21 @@ namespace currency_exchange_rates_bot
                 {
                     var config = context.Configuration;
                     services.AddLogging();
-                    services.AddSingleton<CommandPatternManager>();
-                    services.AddSingleton<ITelegramBotClient>(
-                        new TelegramBotClient(config["BOT_TOKEN"]));
-                    services.AddSingleton<IUpdateHandler, BotHandler>();
-                    services.AddHostedService<BotHandlerService>();
-                    services.AddSingleton<CurrencyAPIService>(new CurrencyAPIService(config["CURRENCY_TOKEN"]));
 
                     services.AddDbContext<CurrencyExchangeDbContext>(options =>
                     options.UseSqlite("Filename=Application.db", builder =>
                     {
                         builder.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName);
                     }));
+
+                    services.AddSingleton<ActionPatternManager>();
+                    services.AddSingleton<ITelegramBotClient>(
+                        new TelegramBotClient(config["BOT_TOKEN"]));
+                    services.AddSingleton<IUpdateHandler, BotHandler>();
+                    services.AddHostedService<BotHandlerService>();
+                    services.AddSingleton<CurrencyAPIService>(new CurrencyAPIService(config["CURRENCY_TOKEN"]));
+
+                    
 
                     var baseType = typeof(IChatAction);
                     foreach (var commandType in baseType.Assembly.GetTypes().Where(t => baseType.IsAssignableFrom(t) && t.IsClass && t.IsPublic && !t.IsAbstract))
@@ -62,8 +65,7 @@ namespace currency_exchange_rates_bot
 
             using (IServiceScope scope = host.Services.CreateScope())
             {
-                IServiceProvider provider = scope.ServiceProvider;
-                CurrencyExchangeDbContext context = provider.GetRequiredService<CurrencyExchangeDbContext>();
+                CurrencyExchangeDbContext context = scope.ServiceProvider.GetRequiredService<CurrencyExchangeDbContext>();
 
                 //if(File.Exists("Application.db"))
                 //    File.Delete("Application.db");

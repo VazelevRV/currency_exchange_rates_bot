@@ -5,8 +5,14 @@ using Telegram.Bot.Types;
 
 namespace currency_exchange_rates_bot.Actions {
     public interface IChatAction {
+       ActionTypes ActionType {get;init;}
        Task ExecuteAsync(BotUser user, Message message, CancellationToken ct);
+       bool Contains(BotUser user, Message message);
+    }
 
-       bool Contains(Message message);
+    public enum ActionTypes
+    {
+        command,
+        state,
     }
 }

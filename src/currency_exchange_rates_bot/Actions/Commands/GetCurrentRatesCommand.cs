@@ -7,10 +7,11 @@ using Telegram.Bot.Types;
 using System;
 using currency_exchange_rates_bot.Models;
 
-namespace currency_exchange_rates_bot.Actions
+namespace currency_exchange_rates_bot.Actions.Commands
 {
     public sealed class GetCurrentRatesCommand : IChatAction
     {
+        public ActionTypes ActionType {get;init;} = ActionTypes.command;
         private readonly CurrencyAPIService _currencyService;
         private readonly ITelegramBotClient _client;
         private const string CommandName = "Поточні";
@@ -21,7 +22,7 @@ namespace currency_exchange_rates_bot.Actions
             _currencyService = currencyService;
         }
 
-        public bool Contains(Message message)
+        public bool Contains(BotUser user, Message message)
         {
             return message.Text.StartsWith(CommandName);
         }

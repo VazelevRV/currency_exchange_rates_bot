@@ -8,7 +8,10 @@ namespace currency_exchange_rates_bot.Models.Keyboards
         {
             new[]
             {
-                new KeyboardButton("Поточні курси"),
+                new KeyboardButton("Поточні курси")
+            },
+            new[]
+            {
                 new KeyboardButton("Конвертувати")
             }
         });
@@ -17,23 +20,23 @@ namespace currency_exchange_rates_bot.Models.Keyboards
         {
             new[]
             {
-                new KeyboardButton("USD"),
-                new KeyboardButton("JPY"), 
-                new KeyboardButton("CNY"), 
-                new KeyboardButton("CHF"), 
-                new KeyboardButton("CAD"), 
-                new KeyboardButton("MXN"), 
-                new KeyboardButton("INR")
+                new KeyboardButton("UAH")
             },
             new[]
-            { 
-                new KeyboardButton("BRL"), 
-                new KeyboardButton("RUB"), 
-                new KeyboardButton("KRW"), 
-                new KeyboardButton("IDR"), 
-                new KeyboardButton("TRY"),
-                new KeyboardButton("SAR"),
-                new KeyboardButton("SEK")
+            {
+                new KeyboardButton("USD")
+            },
+            new[]
+            {
+                new KeyboardButton("EUR")
+            },
+            new[]
+            {
+                new KeyboardButton("RUB")
+            },
+            new[]
+            {
+                new KeyboardButton("CAD")
             }
         });
     }

@@ -4,10 +4,11 @@ namespace currency_exchange_rates_bot.Models.DTO.Responses
 {
     public class ConvertRatesResponse : ConvertRatesRequest
     {
-        public readonly ConvertRatesRequest RequestInfo;
         public ConvertRatesResponse(ConvertRatesRequest request)
         {
-            RequestInfo = request;
+            From = request.From;
+            To = request.To;
+            Amount = request.Amount;
         }
         public double Result {get;init;}
     }
