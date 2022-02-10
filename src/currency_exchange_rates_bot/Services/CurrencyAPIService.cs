@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace currency_exchange_rates_bot.Services
 {
@@ -12,6 +13,18 @@ namespace currency_exchange_rates_bot.Services
     {
         private const string API_BASE_URI = "https://freecurrencyapi.net/api/v2/";
         private readonly string _currencyToken;
+
+        public static readonly Dictionary<string, string> ActualCurrencies = new Dictionary<string, string>
+        {
+            {"USD", "🇺🇸"},
+            {"EUR", "🇪🇺"},
+            {"RUB", "🇷🇺"},
+            {"GBP", "🇬🇧"},
+            {"CHF", "🇨🇭"},
+            {"JPY", "🇯🇵"},
+            {"CNY", "🇨🇳"},
+            {"UAH", "🇺🇦"}
+        };
 
         private readonly RestClient _apiClient;
         public CurrencyAPIService(string currencyToken)

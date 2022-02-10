@@ -36,8 +36,20 @@ namespace currency_exchange_rates_bot.Models.Keyboards
             },
             new[]
             {
-                new KeyboardButton("CAD")
-            }
+                new KeyboardButton("JPY")
+            },
+            new[]
+            {
+                new KeyboardButton("GBP")
+            },
+            new[]
+            {
+                new KeyboardButton("CNY")
+            },
+            new[]
+            {
+                new KeyboardButton("CHF")
+            },
         });
     }
 }

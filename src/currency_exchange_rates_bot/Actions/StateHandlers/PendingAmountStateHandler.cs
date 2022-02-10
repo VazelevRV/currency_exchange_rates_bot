@@ -77,7 +77,7 @@ namespace currency_exchange_rates_bot.Actions.StateHandlers
 
                 await _client.SendTextMessageAsync(
                           message.Chat.Id,
-                          $"{converted.Amount}{converted.From} = {Math.Round(converted.Result, 2)}{converted.To}",
+                          $"{converted.Amount}{converted.From}{CurrencyAPIService.ActualCurrencies[converted.From]} = {Math.Round(converted.Result, 2)}{converted.To}{CurrencyAPIService.ActualCurrencies[converted.To]}",
                           replyMarkup: KeyboardsManager.GetMainMenu(),
                           cancellationToken: ct);
 

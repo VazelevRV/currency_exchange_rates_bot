@@ -6,6 +6,8 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using System;
 using currency_exchange_rates_bot.Models;
+using System.Linq;
+using System.Globalization;
 
 namespace currency_exchange_rates_bot.Actions.Commands
 {
@@ -33,10 +35,11 @@ namespace currency_exchange_rates_bot.Actions.Commands
                 new CurrentRatesRequest(){BaseCurrency = "UAH"},
                 ct);
 
-            string messageText = $"1 UAH на {DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()} = \n";
+            string messageText = $"1 UAH{CurrencyAPIService.ActualCurrencies["UAH"]} на {DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}\n";
             foreach(var rate in response.Data)
             {
-                messageText += $"{rate.Key} {rate.Value}\n";
+                if(CurrencyAPIService.ActualCurrencies.ContainsKey(rate.Key) && rate.Key != "UAH")
+                    messageText += $"{CurrencyAPIService.ActualCurrencies[rate.Key]}{rate.Key} {rate.Value}\n";
             }
             await _client.SendTextMessageAsync(
                       message.Chat.Id,
